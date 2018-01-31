@@ -1,0 +1,17 @@
+Package: methexp
+Type: Package
+Title: MethExp Uitility Functions
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: For internal use in the Research Methods and Experimental Psychology group.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat
+RoxygenNote: 6.0.1.9000
+Imports: assertthat,
+    rmarkdown,
+    devtools,
+    packrat
+Remotes: crsh/papaja
