@@ -1,0 +1,17 @@
+---
+title             : "Title"
+author            : "Author"
+# date              : "`r format(Sys.time(), '%d %B, %Y')`"
+
+output:
+  html_document:
+    theme         : "spacelab"
+    df_print      : "kable"
+    code_folding  : "show"
+    toc           : true
+    toc_float     : true
+---
+
+```{r init, include = FALSE}
+
+```
