@@ -97,7 +97,7 @@ add_study <- function(x = ".") {
     new_study <- 1
   }
 
-  study_path <- path(x, paste0(x, new_study))
+  study_path <- path(x, paste0(basename(x), new_study))
 
   assertthat::assert_that(dir.create(study_path))
 
