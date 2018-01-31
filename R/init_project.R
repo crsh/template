@@ -98,8 +98,18 @@ add_study <- function(x = ".") {
   }
 
   study_path <- path(x, paste0(basename(x), new_study))
+  results_path <- path(study_path, "results")
 
   assertthat::assert_that(dir.create(study_path))
+  dir.create(path(study_path, "material"))
+  dir.create(results_path)
+  dir.create(path(results_path, "data_raw"))
+  dir.create(path(results_path, "data_processed"))
+
+  file.copy(
+    from = system.file("rmd", "analysis.Rmd", package = "methexp")
+    , to = path(results_path, paste0("analysis", new_study, ".Rmd"))
+  )
 
   basename(study_path)
 }
