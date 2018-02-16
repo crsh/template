@@ -72,6 +72,12 @@ init_project <- function(
   }
   assertthat::assert_that(file.create(path(project_path, "LICENSE")))
 
+  file.copy(
+    from = system.file("rmd", "README.Rmd", package = "methexp")
+    , to = path(results_path, paste0("README", new_study, ".Rmd"))
+  )
+
+  invisible(TRUE)
 }
 
 
