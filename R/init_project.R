@@ -74,7 +74,7 @@ init_project <- function(
 
   file.copy(
     from = system.file("rmd", "README.Rmd", package = "methexp")
-    , to = path(results_path, paste0("README", new_study, ".Rmd"))
+    , to = path(project_path, paste0("README.Rmd"))
   )
 
   invisible(TRUE)
