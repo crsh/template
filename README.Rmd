@@ -7,9 +7,57 @@ output: github_document
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = "",
   fig.path = "README-"
 )
+
+library("methexp")
+library("data.tree")
+
+# Adapted from https://stackoverflow.com/questions/14188197/representing-a-directory-tree-as-a-recursive-list
+tree_list <- function(x) {
+  if(grepl("/packrat$", x)) return(list(" ..." = list()))
+  if(grepl("/\\.git$", x)) return(list(" ..." = list()))
+
+  isdir <- file.info(x)$isdir
+  
+  if(!isdir) {
+    out <- list()
+  } else {
+    files <- list.files(
+      x
+      , full.names   = TRUE
+      , include.dirs = FALSE
+      , all.files = TRUE
+    )
+    
+    dirs <- list.dirs(
+      x
+      , full.names   = TRUE
+      , recursive = FALSE
+    )
+    files <- files[!files %in% dirs]
+    
+    files <- c(
+      dirs[!grepl("^\\.", basename(dirs))]
+      , dirs[grepl("^\\.", basename(dirs))]
+      , files[!grepl("^\\.", basename(files))]
+      , files[grepl("^\\.", basename(files))]
+    )
+    
+    files <- files[!grepl("\\.$", files)]
+    if(length(files) > 0) {
+      out <- lapply(files, tree_list)
+      isdir <- sapply(files, function(x) file.info(x)$isdir)
+      names(out) <- basename(files)
+      names(out)[isdir] <- paste0(names(out)[isdir], "/")
+    } else {
+      out <- list(NULL)
+      names(out) <- paste0(basename(files), "/")
+    }
+  }
+  out
+}
 ```
 
 # methexp
@@ -29,22 +77,36 @@ devtools::install_github("methexp/methexp")
 
 To set up a new project repository using our standard project structure see `init_project()`:
 
-```{r init-project, eval = FALSE}
-# Set up project structure
+```{r init-project, results = "hide", message = FALSE}
+# Set up project structure in temporary directory
+tmp_dir <- tempfile("methexp-")
+
 init_project(
-  x = "new_project"
-  , path = "~/Documents/projects"
+  x = "newproject"
+  , path = tmp_dir
   , git = TRUE
-  , pkg_structure = FALSE
+  , pkg_structure = TRUE
   , packrat = TRUE
+  , ci = TRUE
 )
 
-# Start new study
-add_study(x = "new_project")
+project_path <- path(tmp_dir, "newproject")
+
+# Start another study
+add_study(x = project_path)
 
 # Start new manuscript
 add_paper(
-  x = "new_project"
-  , shorttitle = "new_project_paper"
+  x = project_path
+  , shorttitle = "newproject_paper"
 )
 ```
+
+The resulting directory structure is looks like this:
+
+```{r print-directory-structure, echo = FALSE}
+project_structure <- tree_list(tmp_dir)
+project_structure <- as.Node(project_structure)
+print(project_structure$children$`newproject/`)
+```
+

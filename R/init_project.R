@@ -8,7 +8,8 @@
 #' @param git Logical. Whether to initialize git.
 #' @param pkg_structure Logical. Whether to add R-package infrastructure.
 #' @param packrat Logical. Whether to use \pkg{packrat} to manage package dependencies.
-#' @param ci Logical. Whether to set up continuous integration facilities.
+#' @param ci Logical. Whether to set up continuous integration facilities. Ignored if
+#'   \code{pkg_structure = FALSE}.
 #'
 #' @export
 
@@ -26,6 +27,7 @@ init_project <- function(
   assertthat::assert_that(assertthat::is.flag(pkg_structure))
 
   # Set up folder structure
+  if(!dir.exists(path)) dir.create(path)
   project_path <- path(path, x)
   paper_path <- path(project_path, "paper")
   r_path <- path(project_path, "R")
@@ -35,17 +37,34 @@ init_project <- function(
   if(pkg_structure) {
     devtools::create(project_path)
     devtools::use_testthat(project_path)
+
+    if(ci) {
+      devtools::use_travis(project_path)
+      devtools::use_appveyor(project_path)
+    }
   } else {
     assertthat::assert_that(dir.create(project_path))
     dir.create(r_path)
   }
 
-  if(git) devtools::use_git(pkg = project_path)
-  if(packrat) packrat::init(
-    project = project_path
-    , enter = FALSE
-    , options = list(auto.snapshot = FALSE)
-  )
+  if(git) {
+    if(pkg_structure) {
+      devtools::use_git(pkg = project_path)
+    } else {
+      git2r::init(path = project_path)
+      add_gitignore(
+        c(".Rproj.user", ".Rhistory", ".Ruserdata", ".DS_Store", "Thumbs.db", "*~$")
+        , path = project_path
+      )
+    }
+  }
+  if(packrat) {
+    packrat::init(
+      project = project_path
+      , enter = FALSE
+      , options = list(auto.snapshot = FALSE)
+    )
+  }
 
   add_study(project_path)
   assertthat::assert_that(dir.create(paper_path))
@@ -65,17 +84,9 @@ init_project <- function(
     )
   }
 
-  devtools::use_readme_rmd(project_path)
-  if(ci) {
-    devtools::use_travis(project_path)
-    devtools::use_appveyor(project_path)
-  }
   assertthat::assert_that(file.create(path(project_path, "LICENSE")))
 
-  file.copy(
-    from = system.file("rmd", "README.Rmd", package = "methexp")
-    , to = path(project_path, paste0("README.Rmd"))
-  )
+  add_readme(project_path)
 
   invisible(TRUE)
 }
@@ -112,14 +123,10 @@ add_study <- function(x = ".") {
   dir.create(path(results_path, "data_raw"))
   dir.create(path(results_path, "data_processed"))
 
-  file.copy(
-    from = system.file("rmd", "analysis.Rmd", package = "methexp")
-    , to = path(results_path, paste0("analysis", new_study, ".Rmd"))
-  )
+  add_analysis(results_path, paste0("analysis", new_study, ".Rmd"))
 
   basename(study_path)
 }
-
 
 
 #' Add a new paper
@@ -149,5 +156,63 @@ add_paper <- function(x = ".", shorttitle) {
   )
 
   invisible(paper_path)
+}
+
+#' Add README from template
+#'
+#' Adds a README.Rmd file at the specified location
+#'
+#' @param x Character. Location at which to add a the file.
+#' @param name Character. Name of the to-be-created file. Defaults to \code{README.Rmd}
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+
+add_readme <- function(x = ".", name = NULL) {
+  assertthat::assert_that(is.character(x))
+
+  if(is.null(name)) {
+    name <- "README.Rmd"
+  } else {
+    assertthat::assert_that(is.character(name))
+  }
+
+  file.copy(
+    from = system.file("rmd", "README.Rmd", package = "methexp")
+    , to = path(x, name)
+    , overwrite = FALSE
+  )
+}
+
+
+#' Add analysis file from template
+#'
+#' Adds an new R Markdown file at the specified location
+#'
+#' @param x Character. Location at which to add a the file.
+#' @param name Character. Name of the to-be-created file. Defaults to \code{analysis.Rmd}
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+add_analysis <- function(x = ".", name = NULL) {
+  assertthat::assert_that(is.character(x))
+
+  if(is.null(name)) {
+    name <- "analysis.Rmd"
+  } else {
+    assertthat::assert_that(is.character(name))
+  }
+
+  file.copy(
+    from = system.file("rmd", "analysis.Rmd", package = "methexp")
+    , to = path(x, name)
+    , overwrite = FALSE
+  )
 }
 

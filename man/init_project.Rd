@@ -18,7 +18,8 @@ init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
 
 \item{packrat}{Logical. Whether to use \pkg{packrat} to manage package dependencies.}
 
-\item{ci}{Logical. Whether to set up continuous integration facilities.}
+\item{ci}{Logical. Whether to set up continuous integration facilities. Ignored if
+\code{pkg_structure = FALSE}.}
 }
 \description{
 Creates a folder structure and sets up basic functionality.
