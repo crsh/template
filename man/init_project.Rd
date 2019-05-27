@@ -5,7 +5,7 @@
 \title{Set up new project repository}
 \usage{
 init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
-  packrat = TRUE, ci = FALSE)
+  packrat = TRUE)
 }
 \arguments{
 \item{x}{Character. Name of project repository.}
@@ -17,9 +17,6 @@ init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
 \item{pkg_structure}{Logical. Whether to add R-package infrastructure.}
 
 \item{packrat}{Logical. Whether to use \pkg{packrat} to manage package dependencies.}
-
-\item{ci}{Logical. Whether to set up continuous integration facilities. Ignored if
-\code{pkg_structure = FALSE}.}
 }
 \description{
 Creates a folder structure and sets up basic functionality.

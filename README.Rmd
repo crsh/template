@@ -90,7 +90,7 @@ init_project(
   , ci = TRUE
 )
 
-project_path <- path(tmp_dir, "newproject")
+project_path <- file.path(tmp_dir, "newproject")
 
 # Start another study
 add_study(x = project_path)

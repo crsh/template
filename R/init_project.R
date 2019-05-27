@@ -8,8 +8,8 @@
 #' @param git Logical. Whether to initialize git.
 #' @param pkg_structure Logical. Whether to add R-package infrastructure.
 #' @param packrat Logical. Whether to use \pkg{packrat} to manage package dependencies.
-#' @param ci Logical. Whether to set up continuous integration facilities. Ignored if
-#'   \code{pkg_structure = FALSE}.
+# #' @param ci Logical. Whether to set up continuous integration facilities. Ignored if
+# #'   \code{pkg_structure = FALSE}.
 #'
 #' @export
 
@@ -19,7 +19,7 @@ init_project <- function(
   , git = TRUE
   , pkg_structure = FALSE
   , packrat = TRUE
-  , ci = FALSE
+  # , ci = FALSE
 ) {
   assertthat::assert_that(is.character(x))
   assertthat::assert_that(is.character(path))
@@ -28,36 +28,36 @@ init_project <- function(
 
   # Set up folder structure
   if(!dir.exists(path)) dir.create(path)
-  project_path <- path(path, x)
-  paper_path <- path(project_path, "paper")
-  r_path <- path(project_path, "R")
-  poster_talk_path <- path(project_path, "talks_posters")
-  grant_path <- path(project_path, "grants")
+  project_path <- file.path(path, x)
+  paper_path <- file.path(project_path, "paper")
+  r_path <- file.path(project_path, "R")
+  poster_talk_path <- file.path(project_path, "talks_posters")
+  grant_path <- file.path(project_path, "grants")
 
   if(pkg_structure) {
-    devtools::create(project_path)
-    devtools::use_testthat(project_path)
-
-    if(ci) {
-      devtools::use_travis(project_path)
-      devtools::use_appveyor(project_path)
-    }
+    usethis::create_package(project_path, open = FALSE)
+    usethis::use_testthat()
   } else {
     assertthat::assert_that(dir.create(project_path))
     dir.create(r_path)
   }
 
   if(git) {
-    if(pkg_structure) {
-      devtools::use_git(pkg = project_path)
-    } else {
-      git2r::init(path = project_path)
+    usethis::use_git(message = "Sets up repository structure")
+
+    # if(pkg_structure & ci) {
+    #   usethis::use_github()
+    #   usethis::use_travis()
+    #   usethis::use_appveyor()
+    # } else {
+    #   git2r::init(path = project_path)
       add_gitignore(
         c(".Rproj.user", ".Rhistory", ".Ruserdata", ".DS_Store", "Thumbs.db", "*~$")
         , path = project_path
       )
-    }
+    # }
   }
+
   if(packrat) {
     packrat::init(
       project = project_path
@@ -72,7 +72,7 @@ init_project <- function(
   assertthat::assert_that(dir.create(grant_path))
 
   if(pkg_structure) {
-    devtools::use_build_ignore(
+    usethis::use_build_ignore(
       c(
         project_path
         , paste0(x, "\\d+")
@@ -80,11 +80,10 @@ init_project <- function(
         , poster_talk_path
         , grant_path
       )
-      , pkg = project_path
     )
   }
 
-  assertthat::assert_that(file.create(path(project_path, "LICENSE")))
+  assertthat::assert_that(file.create(file.path(project_path, "LICENSE")))
 
   add_readme(project_path)
 
@@ -114,14 +113,14 @@ add_study <- function(x = ".") {
     new_study <- 1
   }
 
-  study_path <- path(x, paste0(basename(x), new_study))
-  results_path <- path(study_path, "results")
+  study_path <- file.path(x, paste0(basename(x), new_study))
+  results_path <- file.path(study_path, "results")
 
   assertthat::assert_that(dir.create(study_path))
-  dir.create(path(study_path, "material"))
+  dir.create(file.path(study_path, "material"))
   dir.create(results_path)
-  dir.create(path(results_path, "data_raw"))
-  dir.create(path(results_path, "data_processed"))
+  dir.create(file.path(results_path, "data_raw"))
+  dir.create(file.path(results_path, "data_processed"))
 
   add_analysis(results_path, paste0("analysis", new_study, ".Rmd"))
 
@@ -143,12 +142,12 @@ add_paper <- function(x = ".", shorttitle) {
   assertthat::assert_that(is.character(x))
   assertthat::assert_that(is.character(shorttitle))
 
-  paper_path <- path(x, "paper", shorttitle)
+  paper_path <- file.path(x, "paper", shorttitle)
   assertthat::assert_that(dir.create(paper_path))
-  assertthat::assert_that(dir.create(path(paper_path, "submissions")))
+  assertthat::assert_that(dir.create(file.path(paper_path, "submissions")))
 
   rmarkdown::draft(
-    path(paper_path, paste0(shorttitle, ".Rmd"))
+    file.path(paper_path, paste0(shorttitle, ".Rmd"))
     , "apa6"
     , package = "papaja"
     , create_dir = FALSE
@@ -182,7 +181,7 @@ add_readme <- function(x = ".", name = NULL) {
 
   file.copy(
     from = system.file("rmd", "README.Rmd", package = "methexp")
-    , to = path(x, name)
+    , to = file.path(x, name)
     , overwrite = FALSE
   )
 }
@@ -211,7 +210,7 @@ add_analysis <- function(x = ".", name = NULL) {
 
   file.copy(
     from = system.file("rmd", "analysis.Rmd", package = "methexp")
-    , to = path(x, name)
+    , to = file.path(x, name)
     , overwrite = FALSE
   )
 }

@@ -1,19 +1,3 @@
-#' Concatenate strings to file path
-#'
-#' Concatenate vectors to file path after converting to character.
-#'
-#' @inheritParams base::paste
-#'
-#' @export
-#'
-#' @examples
-#' path("foo", "bar")
-
-path <- function(...) {
-  paste(..., sep = "/")
-}
-
-
 add_gitignore <- function(x, path, quiet = FALSE) {
   assertthat::assert_that(is.character(x))
   assertthat::assert_that(is.character(path))
