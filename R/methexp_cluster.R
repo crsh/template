@@ -11,7 +11,7 @@
 #'
 #' @export
 
-methexp_cluster <- function(user = "mariusbarth", master = "134.95.17.36") {
+methexp_cluster <- function(user = "computer", master = "134.95.17.36") {
 
   if(missing(user) || is.null(user)) stop("Please provide a SSH user name.")
   if(missing(master) || is.null(master)) stop("Please provide a master IPv4 address.")

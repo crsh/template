@@ -4,7 +4,7 @@
 \alias{methexp_cluster}
 \title{Create a Parallel Socket Cluster}
 \usage{
-methexp_cluster(user = "mariusbarth", master = "134.95.17.36")
+methexp_cluster(user = "computer", master = "134.95.17.36")
 }
 \arguments{
 \item{user}{Character. SSH user name on lab machines, needs to be created by admin.}
