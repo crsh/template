@@ -8,18 +8,20 @@
 #'
 #' @param user Character. SSH user name on lab machines, needs to be created by admin.
 #' @param master Character. IPv4 address of your own machine.
+#' @param cores Integer. The number of cores per servant host.
 #'
 #' @export
 
-methexp_cluster <- function(user = "computer", master = "134.95.17.36") {
+methexp_cluster <- function(user = "computer", master = "134.95.17.36", cores = 6L) {
 
   if(missing(user) || is.null(user)) stop("Please provide a SSH user name.")
   if(missing(master) || is.null(master)) stop("Please provide a master IPv4 address.")
+  if(missing(cores) || is.null(cores) || is.na(cores)) cores <- 6L
 
   addresses <- paste0("134.95.17.", c(2, 62:65))
 
   machineAddresses <- lapply(addresses, FUN = function(x) {
-    list(host = x, user = user, ncore = 6L)
+    list(host = x, user = user, cores = cores)
   })
 
   spec <- unlist(lapply(
@@ -28,7 +30,7 @@ methexp_cluster <- function(user = "computer", master = "134.95.17.36") {
       rep(list(list(
         host=x$host,
         user=x$user)),
-        x$ncore)
+        x$cores)
     }), recursive = FALSE)
 
   parallel::makeCluster(

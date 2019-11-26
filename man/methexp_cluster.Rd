@@ -4,12 +4,14 @@
 \alias{methexp_cluster}
 \title{Create a Parallel Socket Cluster}
 \usage{
-methexp_cluster(user = "computer", master = "134.95.17.36")
+methexp_cluster(user = "computer", master = "134.95.17.36", cores = 6L)
 }
 \arguments{
 \item{user}{Character. SSH user name on lab machines, needs to be created by admin.}
 
 \item{master}{Character. IPv4 address of your own machine.}
+
+\item{cores}{Integer. The number of cores per servant host.}
 }
 \description{
 This convenience function creates a PSOCK cluster on our spare lab machines.
