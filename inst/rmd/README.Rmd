@@ -7,13 +7,17 @@ output: github_document
 First Author & Second Author
 Affiliation
 
+---
+Abstract
+---
 
-This repository research products associated with the publication.
-We provide the experimental software and stimulus material that we are permitted to share in the `Material` directory.
-The R Markdown files in the `Data and analysis procedure/Command files/` directory contain details of how all the analyses reported in the paper were conducted, as well as instructions on how to rerun the analysis to reproduce the results.
+
+This repository contains research products associated with the publication.
+We provide the experimental software and stimulus material that we are permitted to share in the `...` directory.
+The R Markdown files in the `...` directory contain details about the analyses reported in the paper, as well as instructions on how to rerun the analysis to reproduce the results.
 With the help of the R package `rmarkdown` the files can be rendered into the accepted version of the manuscript in `PDF`-format.
-The `Data and analysis procedure/Raw data/` directory contains all the raw data; merged and processed data files can be found in `Data and analysis procedure/Processed data/`.
-The published version of the article can be found in `Research report`.
+The `.../data_raw/` directory contains all the raw data as originally recoreded; merged and processed data files can be found in `.../data_processed/`.
+The postprint of the published article can be found at `...`.
 
 
 ## Publication (recommended citation)
@@ -23,26 +27,29 @@ The published version of the article can be found in `Research report`.
 
 ## Dataset description
 
-Data were collected collected at the lab of the Research Methods and Experimental Psychology group, Department Psychology, University of Cologne, Cologne, Germany.
+Data were collected at the lab of the Research Methods and Experimental Psychology group, Department Psychology, University of Cologne, Cologne, Germany.
 
-Study1      : YYYY-MM-DD - YYYY-MM-DD
+| Study        | Data collection period  |
+| ------------ | ----------------------- |
+| Stud1        | YYYY-MM-DD - YYYY-MM-DD |
+
 
 Descriptions of the data collection methods are provided in the study protocol and research report.
 Processed data are provided `RDS`-format, which can be readily imported into R using `loadRDS()`.
-Details about the data processing steps are available in the R Markdown files in `Data and analysis procedure/Command files/`.
+Details about the data processing steps are available in the R Markdown files in `...`.
 
 
 ## Software requirements
 
 ### Experimental software
 
-The experiment was programmed using PsychoPy 1.82.01 and 1.83.01. See the respective README documents in the Material subdirectories for additional information.
+The experiment was programmed using [OpenSesame](http://osdoc.cogsci.nl/). See the respective README documents in the Material subdirectories for additional information.
 
 ### Analyses
 
-Analyses were originally run on Ubuntu 14.04 using R 3.4.3 and Stan 2.16.0, and the R-packages afex 0.18.0, BayesFactor 0.9.12.2, brms 1.10.2, fitdistrplus 1.0.9, ggplot2 2.2.1, lme4 1.1.14, lsmeans 2.27.61, papaja 0.1.0.9655, rmarkdown 1.8, and rstan 2.16.2.
+Analyses were originally run on Ubuntu ... using R ... .
 
-To install [papaja](https://github.com/crsh/papaja#installation) and [brms](https://github.com/paul-buerkner/brms#how-do-i-install-brms) please review the installation instructions.
+To install `papaja` please review the [installation instructions](https://github.com/crsh/papaja#installation).
 
 
 ## Acknowledgements
@@ -55,28 +62,25 @@ To install [papaja](https://github.com/crsh/papaja#installation) and [brms](http
 
 ## Licensing information
 
-Manuscript: [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
-
-Code: [MIT](http://opensource.org/licenses/MIT) 2017 First Author
-
-Data: [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse
-
-Material:
-
-  - Experimental software: [MIT](http://opensource.org/licenses/MIT) 2017 First Author
-  - Stimulus material: [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
+| Material              | License                                                      |
+| --------------------- | ------------------------------------------------------------ |
+| Stimulus material     | [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)     |
+| Experimental software | [MIT](http://opensource.org/licenses/MIT) 2018 Ernst-August Doelle |
+| Data                  | [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse |
+| Analysis code         | [MIT](http://opensource.org/licenses/MIT) 2018 Ernst-August Doelle |
+| Manuscript            | [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)     |
 
 
 ## Contact
 
-...
+Ernst-August Doelle
 Research Methods and Experimental Psychology
 Department Psychology
 University of Cologne
 Herbert-Lewin-Str. 2, 50931 Cologne, Germany
 
 Phone: +49 221 470-...
-E-mail:...
+E-mail: ea.doelle@uni-koeln.de
 
 
 ## File list

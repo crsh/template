@@ -5,7 +5,7 @@
 \title{Set up new project repository}
 \usage{
 init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
-  packrat = TRUE)
+  renv = FALSE, drake = FALSE)
 }
 \arguments{
 \item{x}{Character. Name of project repository.}
