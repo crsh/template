@@ -8,8 +8,7 @@ Description: For internal use in the Research Methods and Experimental Psycholog
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Imports:
     assertthat,
     rmarkdown,
@@ -18,5 +17,6 @@ Imports:
 Suggests:
     git2r,
     renv,
-    drake
+    drake,
+    testthat
 Remotes: crsh/papaja
