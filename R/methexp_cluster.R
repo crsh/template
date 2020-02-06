@@ -12,13 +12,18 @@
 #'
 #' @export
 
-methexp_cluster <- function(user = "computer", master = "134.95.17.36", cores = 6L) {
+methexp_cluster <- function(
+  user = "computer"
+  , master = "134.95.17.36"
+  , servants = paste0("134.95.17.", 62:65)
+  , cores = 6L
+) {
 
   if(missing(user) || is.null(user)) stop("Please provide a SSH user name.")
   if(missing(master) || is.null(master)) stop("Please provide a master IPv4 address.")
   if(missing(cores) || is.null(cores) || is.na(cores)) cores <- 6L
 
-  addresses <- paste0("134.95.17.", c(2, 62:65))
+  addresses <- servants
 
   machineAddresses <- lapply(addresses, FUN = function(x) {
     list(host = x, user = user, cores = cores)
