@@ -19,9 +19,9 @@ methexp_cluster <- function(
   , cores = 6L
 ) {
 
-  if(missing(user) || is.null(user)) stop("Please provide a SSH user name.")
-  if(missing(master) || is.null(master)) stop("Please provide a master IPv4 address.")
-  if(missing(cores) || is.null(cores) || is.na(cores)) cores <- 6L
+  if(is.null(user)) stop("Please provide a SSH user name.")
+  if(is.null(master)) stop("Please provide a master IPv4 address.")
+  if(is.null(cores) || is.na(cores)) cores <- 6L
 
   addresses <- servants
 
