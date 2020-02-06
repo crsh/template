@@ -4,8 +4,7 @@
 \alias{init_project}
 \title{Set up new project repository}
 \usage{
-init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
-  packrat = TRUE)
+init_project(x, path = ".", git = TRUE, pkg_structure = FALSE, packrat = TRUE)
 }
 \arguments{
 \item{x}{Character. Name of project repository.}

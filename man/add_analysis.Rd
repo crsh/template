@@ -11,6 +11,9 @@ add_analysis(x = ".", name = NULL)
 
 \item{name}{Character. Name of the to-be-created file. Defaults to \code{analysis.Rmd}}
 }
+\value{
+
+}
 \description{
 Adds an new R Markdown file at the specified location
 }

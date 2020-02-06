@@ -11,6 +11,9 @@ add_readme(x = ".", name = NULL)
 
 \item{name}{Character. Name of the to-be-created file. Defaults to \code{README.Rmd}}
 }
+\value{
+
+}
 \description{
 Adds a README.Rmd file at the specified location
 }
