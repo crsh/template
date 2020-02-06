@@ -18,7 +18,8 @@ init_project <- function(
   , path = "."
   , git = TRUE
   , pkg_structure = FALSE
-  , packrat = TRUE
+  , renv = FALSE
+  , drake = FALSE
   # , ci = FALSE
 ) {
   assertthat::assert_that(is.character(x))
@@ -36,7 +37,10 @@ init_project <- function(
 
   if(pkg_structure) {
     usethis::create_package(project_path, open = FALSE)
+    wd <- getwd()
+    setwd(project_path)
     usethis::use_testthat()
+    setwd(wd)
   } else {
     assertthat::assert_that(dir.create(project_path))
     dir.create(r_path)
@@ -58,12 +62,18 @@ init_project <- function(
     # }
   }
 
-  if(packrat) {
-    packrat::init(
+  if(renv) {
+    renv::init(
       project = project_path
-      , enter = FALSE
-      , options = list(auto.snapshot = FALSE)
+      , bare = TRUE
+      , options = list(snapshot.type = "packrat")
     )
+
+    usethis::use_package("renv", type = "Suggests")
+  }
+
+  if(drake) {
+    init_drake(x = project_path, git = git, pkg_structure = pkg_structure)
   }
 
   add_study(project_path)
@@ -71,16 +81,19 @@ init_project <- function(
   assertthat::assert_that(dir.create(poster_talk_path))
   assertthat::assert_that(dir.create(grant_path))
 
-  if(pkg_structure) {
-    usethis::use_build_ignore(
-      c(
-        project_path
-        , paste0(x, "\\d+")
-        , paper_path
-        , poster_talk_path
-        , grant_path
+  if(git) {
+    if(pkg_structure) {
+      usethis::use_build_ignore(
+        paste0("^", c(
+          paste0(x, "\\d+")
+          , "paper"
+          , "talks_posters"
+          , "grants"
+        ), "$")
+        , escape = FALSE
       )
-    )
+      usethis::use_citation()
+    }
   }
 
   assertthat::assert_that(file.create(file.path(project_path, "LICENSE")))
