@@ -40,7 +40,7 @@ init_drake <- function(x = ".", git, pkg_structure) {
   usethis::use_package("drake")
 
   if(git) {
-    usethis::use_build_ignore(files = c(drake_files, "drake_cache"))
+    usethis::use_build_ignore(files = c(drake_files, "drake_cache", "drake.log"))
   }
 
   if(pkg_structure) {

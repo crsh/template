@@ -4,7 +4,8 @@
 \alias{init_project}
 \title{Set up new project repository}
 \usage{
-init_project(x, path = ".", git = TRUE, pkg_structure = FALSE, packrat = TRUE)
+init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
+  renv = FALSE, drake = FALSE)
 }
 \arguments{
 \item{x}{Character. Name of project repository.}
@@ -19,4 +20,22 @@ init_project(x, path = ".", git = TRUE, pkg_structure = FALSE, packrat = TRUE)
 }
 \description{
 Creates a folder structure and sets up basic functionality.
+}
+\details{
+When using \pkg{drake} keep the following in mind: First, customize
+  \code{_drake_config.R} (e.g., remove or complete \code{expose_imports()}) and choose
+  a parallelization approach. Parallelization requires the \pkg{future} package. Local
+  parallelization should otherwise work out of the box. For parallelization on the
+  Methexp cluster, set the right hostname or IP for \code{master} (i.e. your IP), and
+  the cluster computers (these should be set to the correct static IP by default). If
+  your \pkg{drake} targets perform parallel computations (e.g., MCMC chain parallelization
+  in \pkg{rstan}), set \code{cores = 1L} in \code{methexp_cluster()} to avoid spawning
+  too many jobs due to the nested parallelization. Make sure that all cluster computers
+  have \pkg{future} and \pkg{drake} installed, otherwise you'll get hard-to-understand
+  errors about missing packages or scheduler problems.
+
+  Finally, if you use \pkg{rstan}, you may want to compile your models first and sample
+  in separate targets. If you parallelize on the Methexp cluster, you may want to compile
+  locally by setting \code{hpc = FALSE} in the \pkg{drake} plan and set
+  \code{rstan_options(auto_write = TRUE)} to avoid unnecessary model recompilation.
 }
