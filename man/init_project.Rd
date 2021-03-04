@@ -4,8 +4,15 @@
 \alias{init_project}
 \title{Set up new project repository}
 \usage{
-init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
-  renv = FALSE, drake = FALSE)
+init_project(
+  x,
+  path = ".",
+  git = TRUE,
+  pkg_structure = TRUE,
+  drake = FALSE,
+  targets = FALSE,
+  docker = TRUE
+)
 }
 \arguments{
 \item{x}{Character. Name of project repository.}
@@ -15,8 +22,6 @@ init_project(x, path = ".", git = TRUE, pkg_structure = FALSE,
 \item{git}{Logical. Whether to initialize git.}
 
 \item{pkg_structure}{Logical. Whether to add R-package infrastructure.}
-
-\item{packrat}{Logical. Whether to use \pkg{packrat} to manage package dependencies.}
 }
 \description{
 Creates a folder structure and sets up basic functionality.

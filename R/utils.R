@@ -18,13 +18,11 @@ add_gitignore <- function(x, path, quiet = FALSE) {
 #'
 #' Sets up build files and creates a dedicated \pkg{drake} cache.
 #'
-#' @param x Character. Location at which to initialize drake workflow.
+#' @param x Character. Location at which to initialize \pkg{drake} workflow.
 #' @inheritParams init_project
 #'
 #' @return
 #' @export
-#'
-#' @examples
 
 init_drake <- function(x = ".", git, pkg_structure) {
   drake_files <- c("_drake_config.R", "_build.R", "_build.sh")
@@ -63,3 +61,17 @@ init_drake <- function(x = ".", git, pkg_structure) {
     )
   }
 }
+
+#' #' Initialize \pkg{target} workflow
+#' #'
+#' #' Sets up build files and creates a dedicated \pkg{target} cache.
+#' #'
+#' #' @param x Character. Location at which to initialize \pkg{target} workflow.
+#' #' @inheritParams init_project
+#' #'
+#' #' @return
+#' #' @export
+#'
+#' init_target <- function(x = ".", git, pkg_structure) {
+#'
+#' }

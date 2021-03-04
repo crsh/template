@@ -7,7 +7,6 @@
 #' @param path Character. Path to the folder that is to contain the project repository.
 #' @param git Logical. Whether to initialize git.
 #' @param pkg_structure Logical. Whether to add R-package infrastructure.
-#' @param packrat Logical. Whether to use \pkg{packrat} to manage package dependencies.
 # #' @param ci Logical. Whether to set up continuous integration facilities. Ignored if
 # #'   \code{pkg_structure = FALSE}.
 #'
@@ -34,9 +33,10 @@ init_project <- function(
   x
   , path = "."
   , git = TRUE
-  , pkg_structure = FALSE
-  , renv = FALSE
+  , pkg_structure = TRUE
   , drake = FALSE
+  , targets = FALSE
+  , docker = TRUE
   # , ci = FALSE
 ) {
   assertthat::assert_that(is.character(x))
@@ -49,8 +49,7 @@ init_project <- function(
   project_path <- file.path(path, x)
   paper_path <- file.path(project_path, "paper")
   r_path <- file.path(project_path, "R")
-  poster_talk_path <- file.path(project_path, "talks_posters")
-  grant_path <- file.path(project_path, "grants")
+  poster_talk_path <- file.path(project_path, "presentations")
 
   if(pkg_structure) {
     usethis::create_package(project_path, open = FALSE)
@@ -64,29 +63,15 @@ init_project <- function(
   }
 
   if(git) {
+    wd <- getwd()
+    setwd(project_path)
     usethis::use_git(message = "Sets up repository structure")
 
-    # if(pkg_structure & ci) {
-    #   usethis::use_github()
-    #   usethis::use_travis()
-    #   usethis::use_appveyor()
-    # } else {
-    #   git2r::init(path = project_path)
-      add_gitignore(
-        c(".Rproj.user", ".Rhistory", ".Ruserdata", ".DS_Store", "Thumbs.db", "*~$")
-        , path = project_path
-      )
-    # }
-  }
-
-  if(renv) {
-    renv::init(
-      project = project_path
-      , bare = TRUE
-      , options = list(snapshot.type = "packrat")
+    add_gitignore(
+      c(".Rproj.user", ".Rhistory", ".Ruserdata", ".DS_Store", "Thumbs.db", "*~$")
+      , path = project_path
     )
-
-    usethis::use_package("renv", type = "Suggests")
+    setwd(wd)
   }
 
   if(drake) {
@@ -96,7 +81,6 @@ init_project <- function(
   add_study(project_path)
   assertthat::assert_that(dir.create(paper_path))
   assertthat::assert_that(dir.create(poster_talk_path))
-  assertthat::assert_that(dir.create(grant_path))
 
   if(git) {
     if(pkg_structure) {
@@ -113,7 +97,23 @@ init_project <- function(
     }
   }
 
-  assertthat::assert_that(file.create(file.path(project_path, "LICENSE")))
+  if(docker) {
+    file.copy(
+      from = system.file("docker", "Dockerfile", package = "template")
+      , to = project_path
+      , overwrite = FALSE
+    )
+    file.copy(
+      from = system.file("docker", "_run_container.sh", package = "template")
+      , to = project_path
+      , overwrite = FALSE
+    )
+  }
+
+  wd <- getwd()
+  setwd(project_path)
+  usethis::use_ccby_license(name = "Frederik Aust")
+  setwd(wd)
 
   add_readme(project_path)
 
@@ -143,13 +143,17 @@ add_study <- function(x = ".") {
     new_study <- 1
   }
 
-  study_path <- file.path(x, paste0(basename(x), new_study))
+  if(!file.exists("data-raw")) dir.create("data-raw")
+  if(!file.exists("data")) dir.create("data")
+
+  study_name <- paste0(basename(x), new_study)
+  study_path <- file.path(x, study_name)
   results_path <- file.path(study_path, "results")
 
   assertthat::assert_that(dir.create(study_path))
   dir.create(file.path(study_path, "material"))
   dir.create(results_path)
-  dir.create(file.path(results_path, "data_raw"))
+  dir.create(file.path("data-raw", study_name))
   dir.create(file.path(results_path, "data_processed"))
 
   add_analysis(results_path, paste0("analysis", new_study, ".Rmd"))
@@ -196,9 +200,6 @@ add_paper <- function(x = ".", shorttitle) {
 #'
 #' @return
 #' @export
-#'
-#' @examples
-
 
 add_readme <- function(x = ".", name = NULL) {
   assertthat::assert_that(is.character(x))
@@ -210,7 +211,7 @@ add_readme <- function(x = ".", name = NULL) {
   }
 
   file.copy(
-    from = system.file("rmd", "README.Rmd", package = "methexp")
+    from = system.file("rmd", "README.Rmd", package = "template")
     , to = file.path(x, name)
     , overwrite = FALSE
   )
@@ -226,8 +227,6 @@ add_readme <- function(x = ".", name = NULL) {
 #'
 #' @return
 #' @export
-#'
-#' @examples
 
 add_analysis <- function(x = ".", name = NULL) {
   assertthat::assert_that(is.character(x))

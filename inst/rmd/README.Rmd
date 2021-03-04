@@ -65,22 +65,25 @@ To install `papaja` please review the [installation instructions](https://github
 | Material              | License                                                      |
 | --------------------- | ------------------------------------------------------------ |
 | Stimulus material     | [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)     |
-| Experimental software | [MIT](http://opensource.org/licenses/MIT) 2018 Ernst-August Doelle |
+| Experimental software | [MIT](http://opensource.org/licenses/MIT) `r format(Sys.Date(), "%Y")` Ernst-August Doelle |
 | Data                  | [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse |
-| Analysis code         | [MIT](http://opensource.org/licenses/MIT) 2018 Ernst-August Doelle |
+| Analysis code         | [MIT](http://opensource.org/licenses/MIT) `r format(Sys.Date(), "%Y")` Ernst-August Doelle |
 | Manuscript            | [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)     |
 
 
 ## Contact
 
-Ernst-August Doelle
-Research Methods and Experimental Psychology
-Department Psychology
-University of Cologne
-Herbert-Lewin-Str. 2, 50931 Cologne, Germany
+Frederik Aust
 
-Phone: +49 221 470-...
-E-mail: ea.doelle@uni-koeln.de
+Psychological Methods Group
+Psychology Department
+University of Amsterdam
+
+Nieuwe Achtergracht 129-B
+1018 WT Amsterdam
+The Netherlands
+
+f.aust@uva.nl
 
 
 ## File list
