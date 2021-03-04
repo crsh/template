@@ -7,7 +7,7 @@
 init_drake(x = ".", git, pkg_structure)
 }
 \arguments{
-\item{x}{Character. Location at which to initialize drake workflow.}
+\item{x}{Character. Location at which to initialize \pkg{drake} workflow.}
 
 \item{git}{Logical. Whether to initialize git.}
 

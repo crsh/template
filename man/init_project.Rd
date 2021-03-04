@@ -7,8 +7,9 @@
 init_project(
   x,
   path = ".",
-  git = TRUE,
   pkg_structure = TRUE,
+  fields = NULL,
+  git = TRUE,
   drake = FALSE,
   targets = FALSE,
   docker = TRUE
@@ -17,11 +18,24 @@ init_project(
 \arguments{
 \item{x}{Character. Name of project repository.}
 
-\item{path}{Character. Path to the folder that is to contain the project repository.}
+\item{path}{A path. If it exists, it is used. If it does not exist, it is
+created, provided that the parent path exists.}
+
+\item{pkg_structure}{Logical. Whether to add R-package infrastructure.}
+
+\item{fields}{A named list of fields to add to \code{DESCRIPTION}, potentially
+overriding default values. See \code{\link[usethis:use_description]{use_description()}} for how you can set
+personalized defaults using package options}
 
 \item{git}{Logical. Whether to initialize git.}
 
-\item{pkg_structure}{Logical. Whether to add R-package infrastructure.}
+\item{drake}{Logical. Whether to set up \pkg{drake} infrastructure.}
+
+\item{targets}{Logical. Whether to set up \pkg{targets} infrastructure.}
+
+\item{docker}{Logical. Whether to configure a default Docker container. For
+details see the
+\url[papaja manual]{http://frederikaust.com/papaja_man/tips-and-tricks.html#docker}}
 }
 \description{
 Creates a folder structure and sets up basic functionality.

@@ -2,7 +2,7 @@ Package: template
 Type: Package
 Title: Project template
 Version: 0.1.0
-Author: Who wrote it
+Author@R: person(given = "Frederik", family = "Aust", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4900-788X"))
 Maintainer: The package maintainer <faust@uva.nl>
 Description: Sets up a project directory using the R package structure and
   optionally using Docker and drake/targets.
@@ -12,8 +12,9 @@ LazyData: true
 RoxygenNote: 7.1.1
 Imports:
     assertthat,
-    rmarkdown,
     devtools,
+    desc,
+    rmarkdown,
     usethis,
     parallel
 Suggests:

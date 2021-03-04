@@ -4,11 +4,14 @@
 #' Creates a folder structure and sets up basic functionality.
 #'
 #' @param x Character. Name of project repository.
-#' @param path Character. Path to the folder that is to contain the project repository.
-#' @param git Logical. Whether to initialize git.
 #' @param pkg_structure Logical. Whether to add R-package infrastructure.
-# #' @param ci Logical. Whether to set up continuous integration facilities. Ignored if
-# #'   \code{pkg_structure = FALSE}.
+#' @inheritParams usethis::create_package
+#' @param git Logical. Whether to initialize git.
+#' @param drake Logical. Whether to set up \pkg{drake} infrastructure.
+#' @param targets Logical. Whether to set up \pkg{targets} infrastructure.
+#' @param docker Logical. Whether to configure a default Docker container. For
+#'   details see the
+#'   \url[papaja manual]{http://frederikaust.com/papaja_man/tips-and-tricks.html#docker}
 #'
 #' @details When using \pkg{drake} keep the following in mind: First, customize
 #'   \code{_drake_config.R} (e.g., remove or complete \code{expose_imports()}) and choose
@@ -32,12 +35,12 @@
 init_project <- function(
   x
   , path = "."
-  , git = TRUE
   , pkg_structure = TRUE
+  , fields = NULL
+  , git = TRUE
   , drake = FALSE
   , targets = FALSE
   , docker = TRUE
-  # , ci = FALSE
 ) {
   assertthat::assert_that(is.character(x))
   assertthat::assert_that(is.character(path))
@@ -52,7 +55,22 @@ init_project <- function(
   poster_talk_path <- file.path(project_path, "presentations")
 
   if(pkg_structure) {
-    usethis::create_package(project_path, open = FALSE)
+    if(is.null(fields)) {
+      fields <- list(
+        `Authors@R` = 'person(given = "Frederik", family = "Aust", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4900-788X"))',
+        Language =  "en"
+      )
+    }
+
+    usethis::create_package(
+      project_path
+      , open = FALSE
+      , rstudio = TRUE
+      , roxygen = TRUE
+      , fields = fields
+      , check_name = FALSE
+    )
+
     wd <- getwd()
     setwd(project_path)
     usethis::use_testthat()
@@ -112,7 +130,12 @@ init_project <- function(
 
   wd <- getwd()
   setwd(project_path)
-  usethis::use_ccby_license(name = "Frederik Aust")
+  if(pkg_structure) {
+    author_name <- author_from_desc()
+  } else {
+    author_name <- "Frederik Aust"
+  }
+  usethis::use_ccby_license(name = author_name)
   setwd(wd)
 
   add_readme(project_path)
@@ -143,8 +166,8 @@ add_study <- function(x = ".") {
     new_study <- 1
   }
 
-  if(!file.exists("data-raw")) dir.create("data-raw")
-  if(!file.exists("data")) dir.create("data")
+  if(!dir.exists(file.path(x, "data-raw"))) dir.create(file.path(x, "data-raw"))
+  if(!dir.exists(file.path(x, "data"))) dir.create(file.path(x, "data"))
 
   study_name <- paste0(basename(x), new_study)
   study_path <- file.path(x, study_name)
@@ -153,8 +176,8 @@ add_study <- function(x = ".") {
   assertthat::assert_that(dir.create(study_path))
   dir.create(file.path(study_path, "material"))
   dir.create(results_path)
-  dir.create(file.path("data-raw", study_name))
-  dir.create(file.path(results_path, "data_processed"))
+  dir.create(file.path(x, "data-raw", study_name))
+  # dir.create(file.path(results_path, "data_processed"))
 
   add_analysis(results_path, paste0("analysis", new_study, ".Rmd"))
 
@@ -238,7 +261,7 @@ add_analysis <- function(x = ".", name = NULL) {
   }
 
   file.copy(
-    from = system.file("rmd", "analysis.Rmd", package = "methexp")
+    from = system.file("rmd", "analysis.Rmd", package = "template")
     , to = file.path(x, name)
     , overwrite = FALSE
   )

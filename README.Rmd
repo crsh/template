@@ -11,7 +11,6 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 
-library("methexp")
 library("data.tree")
 
 # Adapted from https://stackoverflow.com/questions/14188197/representing-a-directory-tree-as-a-recursive-list
@@ -69,8 +68,8 @@ tree_list <- function(x) {
 You can install methexp from github with:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("methexp/methexp")
+# install.packages("remotes")
+remotes::install_github("crsh/template")
 ```
 
 ## Example
@@ -78,19 +77,22 @@ devtools::install_github("methexp/methexp")
 To set up a new project repository using our standard project structure see `init_project()`:
 
 ```{r init-project, results = "hide", message = FALSE}
+library("template")
+
 # Set up project structure in temporary directory
-tmp_dir <- tempfile("methexp-")
+tmp_dir <- tempfile("template-")
 
 init_project(
-  x = "newproject"
+  x = "myproject"
   , path = tmp_dir
-  , git = TRUE
   , pkg_structure = TRUE
-  , packrat = TRUE
-  , ci = TRUE
+  , drake = FALSE
+  , targets = FALSE
+  , docker = TRUE
+  , git = TRUE
 )
 
-project_path <- file.path(tmp_dir, "newproject")
+project_path <- file.path(tmp_dir, "myproject")
 
 # Start another study
 add_study(x = project_path)
@@ -98,7 +100,7 @@ add_study(x = project_path)
 # Start new manuscript
 add_paper(
   x = project_path
-  , shorttitle = "newproject_paper"
+  , shorttitle = "myproject-paper"
 )
 ```
 
@@ -107,6 +109,6 @@ The resulting directory structure is looks like this:
 ```{r print-directory-structure, echo = FALSE}
 project_structure <- tree_list(tmp_dir)
 project_structure <- as.Node(project_structure)
-print(project_structure$children$`newproject/`)
+print(project_structure$children$`myproject/`)
 ```
 

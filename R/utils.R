@@ -75,3 +75,19 @@ init_drake <- function(x = ".", git, pkg_structure) {
 #' init_target <- function(x = ".", git, pkg_structure) {
 #'
 #' }
+
+
+#' Get first author name
+#'
+#' Extracts first author name from DESCRIPTION
+#'
+#' @param ... Passed to \code{desc::desc_get}
+#'
+#' @return
+#' @export
+
+author_from_desc <- function(...) {
+  author <- eval(parse(text = desc::desc_get(..., keys = "Authors@R")))
+  author_name <- paste(unlist(unclass(author[[sapply(lapply(author, function(x) grepl("aut", x$role)), any)]])[[1]][c("given", "family")]), collapse = " ")
+  author_name
+}

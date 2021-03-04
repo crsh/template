@@ -4,7 +4,7 @@ output: github_document
 
 # Paper title
 
-First Author & Second Author
+`r template::author_from_desc()`
 Affiliation
 
 ---
@@ -22,12 +22,11 @@ The postprint of the published article can be found at `...`.
 
 ## Publication (recommended citation)
 
-...
-
+`r `
 
 ## Dataset description
 
-Data were collected at the lab of the Research Methods and Experimental Psychology group, Department Psychology, University of Cologne, Cologne, Germany.
+Data were collected at the lab of ...
 
 | Study        | Data collection period  |
 | ------------ | ----------------------- |
@@ -65,9 +64,9 @@ To install `papaja` please review the [installation instructions](https://github
 | Material              | License                                                      |
 | --------------------- | ------------------------------------------------------------ |
 | Stimulus material     | [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)     |
-| Experimental software | [MIT](http://opensource.org/licenses/MIT) `r format(Sys.Date(), "%Y")` Ernst-August Doelle |
+| Experimental software | [MIT](http://opensource.org/licenses/MIT) `r format(Sys.Date(), "%Y")` `r template::author_from_desc()` |
 | Data                  | [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse |
-| Analysis code         | [MIT](http://opensource.org/licenses/MIT) `r format(Sys.Date(), "%Y")` Ernst-August Doelle |
+| Analysis code         | [MIT](http://opensource.org/licenses/MIT) `r format(Sys.Date(), "%Y")` `r template::author_from_desc()` |
 | Manuscript            | [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)     |
 
 
