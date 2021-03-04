@@ -1,14 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# methexp
+# template
 
-`methexp` contains functions for internal use in the Research Methods
-and Experimental Psychology group.
+`template` contains functions to initialize a new project according to
+my needs.
 
 ## Installation
 
-You can install methexp from github with:
+You can install `template` from github with:
 
 ``` r
 # install.packages("remotes")
