@@ -101,7 +101,7 @@ init_project <- function(
     init_targets(x = x, git = git, pkg_structure = pkg_structure)
   }
 
-  add_study(x)
+  add_study()
   assertthat::assert_that(dir.create(paper_path))
   assertthat::assert_that(dir.create(poster_talk_path))
 
@@ -123,12 +123,12 @@ init_project <- function(
   if(docker) {
     file.copy(
       from = system.file("docker", "Dockerfile", package = "template")
-      , to = x
+      , to = "."
       , overwrite = FALSE
     )
     file.copy(
       from = system.file("docker", "_run_container.sh", package = "template")
-      , to = x
+      , to = "."
       , overwrite = FALSE
     )
   }
@@ -140,7 +140,7 @@ init_project <- function(
   }
   usethis::use_ccby_license(name = author_name)
 
-  add_readme(project_path)
+  add_readme(".")
 
   setwd(wd)
 
