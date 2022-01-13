@@ -28,7 +28,7 @@ init_drake <- function(x = ".", git, pkg_structure) {
   drake_files <- c("_drake_config.R", "_build.R", "_build.sh")
 
   file.copy(
-    from = system.file("drake", drake_files, package = "methexp")
+    from = system.file("drake", drake_files, package = "template")
     , to = file.path(x, drake_files)
     , overwrite = FALSE
   )
@@ -37,7 +37,7 @@ init_drake <- function(x = ".", git, pkg_structure) {
   usethis::use_r(name = "drake_plan")
   usethis::use_package("drake")
 
-  if(git) {
+  if(pkg_structure) {
     usethis::use_build_ignore(files = c(drake_files, "drake_cache", "drake.log"))
   }
 
@@ -62,19 +62,53 @@ init_drake <- function(x = ".", git, pkg_structure) {
   }
 }
 
-#' #' Initialize \pkg{target} workflow
-#' #'
-#' #' Sets up build files and creates a dedicated \pkg{target} cache.
-#' #'
-#' #' @param x Character. Location at which to initialize \pkg{target} workflow.
-#' #' @inheritParams init_project
-#' #'
-#' #' @return
-#' #' @export
+#' Initialize \pkg{targets} workflow
 #'
-#' init_target <- function(x = ".", git, pkg_structure) {
+#' Sets up build files and creates a dedicated \pkg{targets} cache.
 #'
-#' }
+#' @param x Character. Location at which to initialize \pkg{targets} workflow.
+#' @inheritParams init_project
+#'
+#' @return
+#' @export
+
+init_targets <- function(x = ".", git, pkg_structure) {
+  targets_files <- c("_targets.R", "_make.sh")
+
+  file.copy(
+    from = system.file("targets", targets_files, package = "template")
+    , to = file.path(x, targets_files)
+    , overwrite = FALSE
+  )
+
+  usethis::use_package("targets")
+  usethis::use_package("tarchetypes")
+  usethis::use_package("rlang")
+
+  if(pkg_structure) {
+    usethis::use_build_ignore(files = c(targets_files, "_targets"))
+  }
+
+  if(pkg_structure) {
+    rproj <- readLines(file.path(x, paste0(basename(x), ".Rproj")))
+    rproj <- gsub(
+      "BuildType: Package"
+      , "BuildType: Custom\nCustomScriptPath: _make.sh"
+      , rproj
+    )
+    writeLines(rproj, con = file.path(x, paste0(basename(x), ".Rproj")))
+  } else {
+    cat(
+      c(
+        ""
+        , "BuildType: Custom"
+        , "CustomScriptPath: _make.sh"
+      )
+      , file = file.path(x, paste0(basename(x), ".Rproj"))
+      , append = TRUE
+    )
+  }
+}
 
 
 #' Get first author name
