@@ -2,12 +2,14 @@ add_gitignore <- function(x, path, quiet = FALSE) {
   assertthat::assert_that(is.character(x))
   assertthat::assert_that(is.character(path))
 
+  ignore_path <- file.path(path, ".gitignore")
+
   paths <- paste0("`", x, "`", collapse = ", ")
   if (!quiet) {
-    message("* Adding ", paths, " to ", file.path(path, ".gitignore"))
+    message("* Adding ", paths, " to ", ignore_path)
   }
 
-  path <- file.path(path, ".gitignore")
+  path <- ignore_path
   writeLines(x, path)
 
   invisible(TRUE)
@@ -90,13 +92,15 @@ init_targets <- function(x = ".", git, pkg_structure) {
   }
 
   if(pkg_structure) {
-    rproj <- readLines(file.path(x, paste0(basename(x), ".Rproj")))
+    rproj_path <- paste0(basename(x), ".Rproj")
+
+    rproj <- readLines(rproj_path)
     rproj <- gsub(
       "BuildType: Package"
       , "BuildType: Custom\nCustomScriptPath: _make.sh"
       , rproj
     )
-    writeLines(rproj, con = file.path(x, paste0(basename(x), ".Rproj")))
+    writeLines(rproj, con = rproj_path)
   } else {
     cat(
       c(
@@ -104,7 +108,7 @@ init_targets <- function(x = ".", git, pkg_structure) {
         , "BuildType: Custom"
         , "CustomScriptPath: _make.sh"
       )
-      , file = file.path(x, paste0(basename(x), ".Rproj"))
+      , file = rproj_path
       , append = TRUE
     )
   }
