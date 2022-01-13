@@ -89,7 +89,7 @@ init_project <- function(
 
     add_gitignore(
       c(".Rproj.user", ".Rhistory", ".Ruserdata", ".DS_Store", "Thumbs.db", "*~$")
-      , path = x
+      , path = "."
     )
   }
 
