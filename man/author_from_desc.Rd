@@ -2,15 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{author_from_desc}
 \alias{author_from_desc}
-\title{#' Initialize \pkg{target} workflow
-#'
-#' Sets up build files and creates a dedicated \pkg{target} cache.
-#'
-#' @param x Character. Location at which to initialize \pkg{target} workflow.
-#' @inheritParams init_project
-#'
-#' @return
-#' @export}
+\title{Get first author name}
 \usage{
 author_from_desc(...)
 }
@@ -21,8 +13,5 @@ author_from_desc(...)
 
 }
 \description{
-
-}
-\details{
-
+Extracts first author name from DESCRIPTION
 }
