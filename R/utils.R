@@ -85,8 +85,11 @@ init_targets <- function(x = ".", git, pkg_structure) {
   usethis::use_package("tarchetypes")
   usethis::use_package("rlang")
 
-  if(pkg_structure) {
+  if(git) {
+    wd <- getwd()
+    setwd(file.path(wd, x))
     usethis::use_build_ignore(files = c(targets_files, "_targets"))
+    setwd(wd)
   }
 
   if(pkg_structure) {
