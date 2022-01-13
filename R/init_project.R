@@ -96,6 +96,10 @@ init_project <- function(
     init_drake(x = project_path, git = git, pkg_structure = pkg_structure)
   }
 
+  if(targets) {
+    init_targets()
+  }
+
   add_study(project_path)
   assertthat::assert_that(dir.create(paper_path))
   assertthat::assert_that(dir.create(poster_talk_path))
