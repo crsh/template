@@ -54,6 +54,8 @@ init_project <- function(
   r_path <- file.path(project_path, "R")
   poster_talk_path <- file.path(project_path, "presentations")
 
+  wd <- getwd()
+
   if(pkg_structure) {
     if(is.null(fields)) {
       fields <- list(
@@ -71,7 +73,7 @@ init_project <- function(
       , check_name = FALSE
     )
 
-    wd <- getwd()
+
     setwd(project_path)
     usethis::use_testthat()
     setwd(wd)
@@ -80,27 +82,26 @@ init_project <- function(
     dir.create(r_path)
   }
 
+  setwd(project_path)
+
   if(git) {
-    wd <- getwd()
-    setwd(project_path)
     usethis::use_git(message = "Sets up repository structure")
 
     add_gitignore(
       c(".Rproj.user", ".Rhistory", ".Ruserdata", ".DS_Store", "Thumbs.db", "*~$")
-      , path = project_path
+      , path = x
     )
-    setwd(wd)
   }
 
   if(drake) {
-    init_drake(x = project_path, git = git, pkg_structure = pkg_structure)
+    init_drake(x = x, git = git, pkg_structure = pkg_structure)
   }
 
   if(targets) {
-    init_targets()
+    init_targets(x = x, git = git, pkg_structure = pkg_structure)
   }
 
-  add_study(project_path)
+  add_study(x)
   assertthat::assert_that(dir.create(paper_path))
   assertthat::assert_that(dir.create(poster_talk_path))
 
@@ -122,27 +123,26 @@ init_project <- function(
   if(docker) {
     file.copy(
       from = system.file("docker", "Dockerfile", package = "template")
-      , to = project_path
+      , to = x
       , overwrite = FALSE
     )
     file.copy(
       from = system.file("docker", "_run_container.sh", package = "template")
-      , to = project_path
+      , to = x
       , overwrite = FALSE
     )
   }
 
-  wd <- getwd()
-  setwd(project_path)
   if(pkg_structure) {
     author_name <- author_from_desc()
   } else {
     author_name <- "Frederik Aust"
   }
   usethis::use_ccby_license(name = author_name)
-  setwd(wd)
 
   add_readme(project_path)
+
+  setwd(wd)
 
   invisible(TRUE)
 }
