@@ -50,9 +50,9 @@ init_project <- function(
   # Set up folder structure
   if(!dir.exists(path)) dir.create(path)
   project_path <- file.path(path, x)
-  paper_path <- file.path(project_path, "paper")
-  r_path <- file.path(project_path, "R")
-  poster_talk_path <- file.path(project_path, "presentations")
+  paper_path <- "paper"
+  r_path <- "R"
+  poster_talk_path <- "presentations"
 
   wd <- getwd()
 
