@@ -133,12 +133,7 @@ init_project <- function(
     )
   }
 
-  if(pkg_structure) {
-    author_name <- author_from_desc()
-  } else {
-    author_name <- "Frederik Aust"
-  }
-  usethis::use_ccby_license(name = author_name)
+  usethis::use_ccby_license()
 
   add_readme(".")
 
