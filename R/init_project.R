@@ -38,7 +38,7 @@ init_project <- function(
   , pkg_structure = TRUE
   , fields = NULL
   , git = TRUE
-  , targets = FALSE
+  , targets = TRUE
   , docker = TRUE
 ) {
   assertthat::assert_that(is.character(x))

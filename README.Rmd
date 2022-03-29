@@ -85,10 +85,6 @@ tmp_dir <- tempfile("template-")
 init_project(
   x = "myproject"
   , path = tmp_dir
-  , pkg_structure = TRUE
-  , targets = FALSE
-  , docker = TRUE
-  , git = TRUE
 )
 
 project_path <- file.path(tmp_dir, "myproject")
