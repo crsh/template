@@ -16,54 +16,6 @@ add_gitignore <- function(x, path, quiet = FALSE) {
 }
 
 
-#' Initialize \pkg{drake} workflow
-#'
-#' Sets up build files and creates a dedicated \pkg{drake} cache.
-#'
-#' @param x Character. Location at which to initialize \pkg{drake} workflow.
-#' @inheritParams init_project
-#'
-#' @return
-#' @export
-
-init_drake <- function(x = ".", git, pkg_structure) {
-  drake_files <- c("_drake_config.R", "_build.R", "_build.sh")
-
-  file.copy(
-    from = system.file("drake", drake_files, package = "template")
-    , to = file.path(x, drake_files)
-    , overwrite = FALSE
-  )
-
-  drake::new_cache(file.path(x, "drake_cache"))
-  usethis::use_r(name = "drake_plan")
-  usethis::use_package("drake")
-
-  if(pkg_structure) {
-    usethis::use_build_ignore(files = c(drake_files, "drake_cache", "drake.log"))
-  }
-
-  if(pkg_structure) {
-    rproj <- readLines(file.path(x, paste0(basename(x), ".Rproj")))
-    rproj <- gsub(
-      "BuildType: Package"
-      , "BuildType: Custom\nCustomScriptPath: _build.sh"
-      , rproj
-    )
-    writeLines(rproj, con = file.path(x, paste0(basename(x), ".Rproj")))
-  } else {
-    cat(
-      c(
-        ""
-        , "BuildType: Custom"
-        , "CustomScriptPath: _build.sh"
-      )
-      , file = file.path(x, paste0(basename(x), ".Rproj"))
-      , append = TRUE
-    )
-  }
-}
-
 #' Initialize \pkg{targets} workflow
 #'
 #' Sets up build files and creates a dedicated \pkg{targets} cache.
@@ -74,12 +26,18 @@ init_drake <- function(x = ".", git, pkg_structure) {
 #' @return
 #' @export
 
-init_targets <- function(x = ".", git, pkg_structure) {
-  targets_files <- c("_targets.R", "_make.sh")
+init_targets <- function(x, path = ".", git, pkg_structure) {
+  targets_files <- c("_targets.yaml", "_make.sh")
 
   file.copy(
     from = system.file("targets", targets_files, package = "template")
     , to = "."
+    , overwrite = FALSE
+  )
+
+  file.copy(
+    from = system.file("targets", "_targets.R", package = "template")
+    , to = file.path(path, x, paste0(x, "1"), "results")
     , overwrite = FALSE
   )
 
@@ -88,11 +46,11 @@ init_targets <- function(x = ".", git, pkg_structure) {
   usethis::use_package("rlang")
 
   if(git) {
-    usethis::use_build_ignore(files = c(targets_files, "_targets"))
+    usethis::use_build_ignore(files = targets_files)
   }
 
   if(pkg_structure) {
-    rproj_path <- paste0(basename(x), ".Rproj")
+    rproj_path <- paste0(x, ".Rproj")
 
     rproj <- readLines(rproj_path)
     rproj <- gsub(

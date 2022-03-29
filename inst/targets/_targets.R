@@ -35,6 +35,25 @@ tar_option_set(
   , workspace_on_error = TRUE
 )
 
+## Remote parallelized execution
+library("future")
+
+Sys.setenv(
+  PATH = paste0(
+    Sys.getenv("PATH")
+    , ":/usr/lib/rstudio-server/bin/postback"
+  )
+)
+
+methexp_labor_cluster <- methexp::methexp_cluster(
+  master = "134.95.17.37"
+  , user = "computer"
+  , servants = c(paste0("134.95.17.", 62:64), "localhost")
+  , cores = 1L
+)
+
+future::plan(future::cluster, workers = methexp_labor_cluster)
+
 
 # Define plan -------------------------------------------------------------
 

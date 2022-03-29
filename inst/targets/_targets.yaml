@@ -1,0 +1,6 @@
+project_name:
+  reporter_make     : "verbose" # "summary"
+  reporter_outdated : "forecast"
+  script            : "path/to/_targets.R"
+  store             : "path/to/_targets"
+  workers           : "4"

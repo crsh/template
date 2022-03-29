@@ -4,10 +4,13 @@
 \alias{init_targets}
 \title{Initialize \pkg{targets} workflow}
 \usage{
-init_targets(x = ".", git, pkg_structure)
+init_targets(x, path = ".", git, pkg_structure)
 }
 \arguments{
 \item{x}{Character. Location at which to initialize \pkg{targets} workflow.}
+
+\item{path}{A path. If it exists, it is used. If it does not exist, it is
+created, provided that the parent path exists.}
 
 \item{git}{Logical. Whether to initialize git.}
 

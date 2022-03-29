@@ -30,7 +30,6 @@ init_project(
   x = "myproject"
   , path = tmp_dir
   , pkg_structure = TRUE
-  , drake = FALSE
   , targets = FALSE
   , docker = TRUE
   , git = TRUE
@@ -39,7 +38,7 @@ init_project(
 project_path <- file.path(tmp_dir, "myproject")
 
 # Start another study
-add_study(x = project_path)
+add_study(x = "myproject", path = project_path)
 
 # Start new manuscript
 add_paper(

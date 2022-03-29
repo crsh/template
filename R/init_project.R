@@ -7,28 +7,28 @@
 #' @param pkg_structure Logical. Whether to add R-package infrastructure.
 #' @inheritParams usethis::create_package
 #' @param git Logical. Whether to initialize git.
-#' @param drake Logical. Whether to set up \pkg{drake} infrastructure.
 #' @param targets Logical. Whether to set up \pkg{targets} infrastructure.
 #' @param docker Logical. Whether to configure a default Docker container. For
-#'   details see the
-#'   \url[papaja manual]{http://frederikaust.com/papaja_man/tips-and-tricks.html#docker}
+#'   details see http://frederikaust.com/papaja_man/tips-and-tricks.html#docker
 #'
-#' @details When using \pkg{drake} keep the following in mind: First, customize
-#'   \code{_drake_config.R} (e.g., remove or complete \code{expose_imports()}) and choose
-#'   a parallelization approach. Parallelization requires the \pkg{future} package. Local
-#'   parallelization should otherwise work out of the box. For parallelization on the
-#'   Methexp cluster, set the right hostname or IP for \code{master} (i.e. your IP), and
-#'   the cluster computers (these should be set to the correct static IP by default). If
-#'   your \pkg{drake} targets perform parallel computations (e.g., MCMC chain parallelization
-#'   in \pkg{rstan}), set \code{cores = 1L} in \code{methexp_cluster()} to avoid spawning
-#'   too many jobs due to the nested parallelization. Make sure that all cluster computers
-#'   have \pkg{future} and \pkg{drake} installed, otherwise you'll get hard-to-understand
-#'   errors about missing packages or scheduler problems.
+#' @details When using \pkg{targets} keep the following in mind: First, customize
+#'   \code{_targets.yaml} (e.g., customize project name and file paths).
+#'   Remote parallelization requires the \pkg{future} package. Local
+#'   parallelization should work out of the box. For parallelization on the
+#'   Methexp cluster, set the right hostname or IP for \code{master} (i.e. your
+#'   IP) in \code{_targets.R}, and the cluster computers (these should be set to
+#'   the correct static IP by default). If your targets perform parallel
+#'   computations (e.g., MCMC chain parallelization in \pkg{rstan}), set
+#'   \code{cores = 1L} in \code{methexp_cluster()} to avoid spawning too many
+#'   jobs due to the nested parallelization. Make sure that all cluster computers
+#'   have \pkg{future} and \pkg{targets} installed, otherwise you'll get
+#'   hard-to-understand errors about missing packages or scheduler problems.
 #'
-#'   Finally, if you use \pkg{rstan}, you may want to compile your models first and sample
-#'   in separate targets. If you parallelize on the Methexp cluster, you may want to compile
-#'   locally by setting \code{hpc = FALSE} in the \pkg{drake} plan and set
-#'   \code{rstan_options(auto_write = TRUE)} to avoid unnecessary model recompilation.
+#'   Finally, if you use \pkg{rstan}, you may want to compile your models first
+#'   and sample in separate targets. If you parallelize on the Methexp cluster,
+#'   you may want to compile locally by setting \code{deployment = "main"} in
+#'   the \pkg{targets} plan and set \code{rstan_options(auto_write = TRUE)} to
+#'   avoid unnecessary model recompilation.
 #'
 #' @export
 
@@ -38,7 +38,6 @@ init_project <- function(
   , pkg_structure = TRUE
   , fields = NULL
   , git = TRUE
-  , drake = FALSE
   , targets = FALSE
   , docker = TRUE
 ) {
@@ -93,15 +92,12 @@ init_project <- function(
     )
   }
 
-  if(drake) {
-    init_drake(x = x, git = git, pkg_structure = pkg_structure)
-  }
+  add_study(x = x, path = ".")
 
   if(targets) {
-    init_targets(x = x, git = git, pkg_structure = pkg_structure)
+    init_targets(x = x, path = ".", git = git, pkg_structure = pkg_structure)
   }
 
-  add_study()
   assertthat::assert_that(dir.create(paper_path))
   assertthat::assert_that(dir.create(poster_talk_path))
 
@@ -121,14 +117,14 @@ init_project <- function(
   }
 
   if(docker) {
-    file.copy(
-      from = system.file("docker", "Dockerfile", package = "template")
-      , to = "."
+    download.file(
+      url = "https://raw.githubusercontent.com/crsh/papaja_docker/main/rstudio/Dockerfile"
+      , destfile = "./Dockerfile"
       , overwrite = FALSE
     )
-    file.copy(
-      from = system.file("docker", "_run_container.sh", package = "template")
-      , to = "."
+    download.file(
+      url = "https://raw.githubusercontent.com/crsh/papaja_docker/main/rstudio/run_docker.sh"
+      , destfile = "./_run_docker.sh"
       , overwrite = FALSE
     )
   }
@@ -152,10 +148,11 @@ init_project <- function(
 #'
 #' @export
 
-add_study <- function(x = ".") {
+add_study <- function(x, path = ".") {
   assertthat::assert_that(is.character(x))
+  assertthat::assert_that(is.character(path))
 
-  project_directories <- list.dirs(x, recursive = FALSE)
+  project_directories <- list.dirs(path, recursive = FALSE)
   studies <- grep("\\d+$", project_directories, value = TRUE)
 
   if(length(studies) > 0) {
@@ -165,17 +162,17 @@ add_study <- function(x = ".") {
     new_study <- 1
   }
 
-  if(!dir.exists(file.path(x, "data-raw"))) dir.create(file.path(x, "data-raw"))
-  if(!dir.exists(file.path(x, "data"))) dir.create(file.path(x, "data"))
+  if(!dir.exists(file.path(path, "data-raw"))) dir.create(file.path(path, "data-raw"))
+  if(!dir.exists(file.path(path, "data"))) dir.create(file.path(path, "data"))
 
-  study_name <- paste0(basename(x), new_study)
-  study_path <- file.path(x, study_name)
+  study_name <- paste0(x, new_study)
+  study_path <- file.path(path, study_name)
   results_path <- file.path(study_path, "results")
 
   assertthat::assert_that(dir.create(study_path))
   dir.create(file.path(study_path, "material"))
   dir.create(results_path)
-  dir.create(file.path(x, "data-raw", study_name))
+  dir.create(file.path(path, "data-raw", study_name))
   # dir.create(file.path(results_path, "data_processed"))
 
   add_analysis(results_path, paste0("analysis", new_study, ".Rmd"))
