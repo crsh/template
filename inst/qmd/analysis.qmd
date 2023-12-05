@@ -1,0 +1,31 @@
+---
+title: "Analysis"
+author: "Frederik Aust"
+date: "`r Sys.Date()`"
+
+toc: true
+number-sections: true
+reference-location: margin
+
+highlight-style: github
+theme: lumen
+
+execute:
+  keep-md: true
+
+format:
+  html:
+    code-fold: true
+    standalone: true
+    embed-resources: true
+    self-contained: true
+    link-external-icon: true
+    citations-hover: true
+    footnotes-hover: true
+---
+
+```{r}
+#| label: init
+#| include: false
+
+```

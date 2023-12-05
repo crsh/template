@@ -9,7 +9,7 @@ Description: Sets up a project directory using the R package structure and
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Imports:
     assertthat,
     devtools,

@@ -10,6 +10,8 @@
 #' @param targets Logical. Whether to set up \pkg{targets} infrastructure.
 #' @param docker Logical. Whether to configure a default Docker container. For
 #'   details see http://frederikaust.com/papaja_man/tips-and-tricks.html#docker
+#' @param quarto Logical. Wether to use \pkg{quarto} for reproducible reporting,
+#'   or R Markdown.
 #'
 #' @details When using \pkg{targets} keep the following in mind: First, customize
 #'   \code{_targets.yaml} (e.g., customize project name and file paths).
@@ -40,6 +42,7 @@ init_project <- function(
   , git = TRUE
   , targets = TRUE
   , docker = TRUE
+  , quarto = TRUE
 ) {
   assertthat::assert_that(is.character(x))
   assertthat::assert_that(is.character(path))
@@ -92,7 +95,7 @@ init_project <- function(
     )
   }
 
-  add_study(x = x, path = ".")
+  add_study(x = x, path = ".", quarto = quarto)
 
   if(targets) {
     init_targets(x = x, path = ".", git = git, pkg_structure = pkg_structure)
@@ -145,10 +148,13 @@ init_project <- function(
 #' Set up directory structure for a new study in an existing project repository.
 #'
 #' @param x Character. Path to project repository.
+#' @param path Character. Base path. 
+#' @param quarto Logical. Wether to use \pkg{quarto} for reproducible reporting,
+#'   or R Markdown.
 #'
 #' @export
 
-add_study <- function(x, path = ".") {
+add_study <- function(x, path = ".", quarto = TRUE) {
   assertthat::assert_that(is.character(x))
   assertthat::assert_that(is.character(path))
 
@@ -175,7 +181,12 @@ add_study <- function(x, path = ".") {
   dir.create(file.path(path, "data-raw", study_name))
   # dir.create(file.path(results_path, "data_processed"))
 
-  add_analysis(results_path, paste0("analysis", new_study, ".Rmd"))
+  if(quarto) {
+    add_analysis(results_path, paste0("analysis", new_study, ".qmd"))
+  } else {
+    add_analysis(results_path, paste0("analysis", new_study, ".Rmd"))
+  }
+  
 
   basename(study_path)
 }
@@ -256,10 +267,15 @@ add_analysis <- function(x = ".", name = NULL) {
     assertthat::assert_that(is.character(name))
   }
 
+  if(grepl("\\.qmd$", name)) {
+    template <- system.file("qmd", "analysis.qmd", package = "template")
+  } else {
+    template <- system.file("rmd", "analysis.Rmd", package = "template")
+  }
+
   file.copy(
-    from = system.file("rmd", "analysis.Rmd", package = "template")
+    from = template
     , to = file.path(x, name)
     , overwrite = FALSE
   )
 }
-

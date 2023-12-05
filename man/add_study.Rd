@@ -4,10 +4,15 @@
 \alias{add_study}
 \title{Add a new study}
 \usage{
-add_study(x = ".")
+add_study(x, path = ".", quarto = TRUE)
 }
 \arguments{
 \item{x}{Character. Path to project repository.}
+
+\item{path}{Character. Base path.}
+
+\item{quarto}{Logical. Wether to use \pkg{quarto} for reproducible reporting,
+or R Markdown.}
 }
 \description{
 Set up directory structure for a new study in an existing project repository.

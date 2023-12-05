@@ -9,9 +9,6 @@ author_from_desc(...)
 \arguments{
 \item{...}{Passed to \code{desc::desc_get}}
 }
-\value{
-
-}
 \description{
 Extracts first author name from DESCRIPTION
 }

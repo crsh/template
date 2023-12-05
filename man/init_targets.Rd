@@ -16,9 +16,6 @@ created, provided that the parent path exists.}
 
 \item{pkg_structure}{Logical. Whether to add R-package infrastructure.}
 }
-\value{
-
-}
 \description{
 Sets up build files and creates a dedicated \pkg{targets} cache.
 }

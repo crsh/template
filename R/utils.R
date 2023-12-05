@@ -37,7 +37,7 @@ init_targets <- function(x, path = ".", git, pkg_structure) {
 
   file.copy(
     from = system.file("targets", "_targets.R", package = "template")
-    , to = file.path(path, x, paste0(x, "1"), "results")
+    , to = file.path(path, paste0(x, "1"), "results")
     , overwrite = FALSE
   )
 

@@ -10,8 +10,9 @@ init_project(
   pkg_structure = TRUE,
   fields = NULL,
   git = TRUE,
-  targets = FALSE,
-  docker = TRUE
+  targets = TRUE,
+  docker = TRUE,
+  quarto = TRUE
 )
 }
 \arguments{
@@ -24,15 +25,17 @@ created, provided that the parent path exists.}
 
 \item{fields}{A named list of fields to add to \code{DESCRIPTION}, potentially
 overriding default values. See \code{\link[usethis:use_description]{use_description()}} for how you can set
-personalized defaults using package options}
+personalized defaults using package options.}
 
 \item{git}{Logical. Whether to initialize git.}
 
 \item{targets}{Logical. Whether to set up \pkg{targets} infrastructure.}
 
 \item{docker}{Logical. Whether to configure a default Docker container. For
-details see the
-\url[papaja manual]{http://frederikaust.com/papaja_man/tips-and-tricks.html#docker}}
+details see http://frederikaust.com/papaja_man/tips-and-tricks.html#docker}
+
+\item{quarto}{Logical. Wether to use \pkg{quarto} for reproducible reporting,
+or R Markdown.}
 }
 \description{
 Creates a folder structure and sets up basic functionality.
