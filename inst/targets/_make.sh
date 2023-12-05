@@ -34,4 +34,4 @@ Sys.setenv(TAR_PROJECT = project)
 
 cat(paste0("\nIt is now:  ", Sys.time()), "\n\n")
 
-targets::tar_make_future(names = !!tbd_targets)
+targets::tar_make(names = !!tbd_targets)
